@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.1.1/angular.min.js"></script>
+    <script src="https://apis.google.com/js/platform.js"async defer></script>
+
+    <meta charset="UTF-8">
+    <title>AngularJS login</title>
+    <script>
+
+        var myApp = angular.module("myApp",[])
+
+        myApp.controller('myController',['$scope', function($scope) {
+            $scope.gmail = {
+                username: "",
+                email: ""
+            };
+            $scope.onGoogleLogin  = function () {
+                var parameter = {
+                    'clientid': '208493757065-5n1f30obb8smercveh4j4i9dk4vsc40c.apps.googleusercontent.com',
+                    'cookiepolicy': 'single_host_origin',
+                    'callback': function (result) {
+                        if (result['status'] ['signed_in']) {
+                            var request = gapi.client.plus.people.get(
+                                {
+                                    'userId': 'me'
+                                }
+                            );
+                            request.execute(function (resp) {
+                                $scope.$apply(function () {
+                                    $scope.gmail.username = resp.displayName;
+                                    $scope.gmail.email = resp.emails[0].value;
+                                    $scope.g_image = resp.image.url;
+                                });
+                            });
+                        }
+                    },
+                    'approvalprompt': 'force',
+                    'scope': 'https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.profile.emails.read'
+                };
+                gapi.auth.signIn(parameter);
+            }
+        }]);
+    </script>
+
+</head>
+
+<body>
+
+<div align="center">
+    <div ng-app="myApp" ng-controller="myController">
+
+
+        <h1><strong>Google Login</strong></h1>
+        <input type = "button" ng-click="onGoogleLogin()" value = "login" style = "width: 100px; height: 60px"/>
+        </br>
+        <p>{{gmail.username}}</p>
+        </br>
+        <p>{{gmail.email}}</p>
+        </br>
+        <img ng-src = "{{g_image}}" style = "width: 150px; height: 150px">
+
+        <script type="text/javascript" src = "app.js"></script>
+        <script type="text/javascript">
+            (function() {
+                var p = document.createElement('script');
+                p.type = 'text/javascript';
+                p.async = true;
+                p.src = 'https://apis.google.com/js/client.js?onload=onLoadFunction';
+                var s = document.getElementsByTagName('script')[0];
+                s.parentNode.insertBefore(p, s);
+            })();
+
+        </script>
+    </div>
+</div>
+</body>
+</html>

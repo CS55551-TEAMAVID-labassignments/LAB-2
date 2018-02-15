@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local Storage</title>
+</head>
+<body>
+<h2>Register</h2>
+<p>Please enter your details here</p>
+<form id="register-form">
+    <label for="name">User Name</label>
+    <input id="name" type="text" placeholder="Select a UserName" value=""/>
+    </br>
+    </br>
+    <label for="pw">Password</label>
+    <input id="pw" type="password" placeholder="Set a Password" value=""/>
+    </br>
+    </br>
+    <input id="rgstr_btn" type="submit" value="Register Details" onClick="store()"/>
+</form>
+
+<form id="login-form">
+    <h2>Welcome Guest!</h2>
+    <p>Please enter your login and password here</p>
+    <label for="userName">User Name</label>
+    <input id="userName" type="text" placeholder="Enter Username" value=""/>
+    </br>
+    </br>
+    <label for="userPw">Password</label>
+    <input id="userPw" type="password" placeholder="Enter Password" value=""/>
+    </br>
+    </br>
+    <input id="login_btn" type="submit" value="Login" onClick="check()"/>
+</form>
+
+<script type="text/javascript" src="jquery-1.11.3.min.js"></script>
+<script type="text/javascript" language="javascript" src="login.js"></script>
+
+</body>
+</html>
+
+
+<script>
+    // Name and Password from the register-form
+    var name = document.getElementById('name');
+    var pw = document.getElementById('pw');
+
+    // storing input from register-form
+    function store() {
+        localStorage.setItem('name', name.value);
+        localStorage.setItem('pw', pw.value);
+    }
+
+    // check if stored data from register-form is equal to entered data in the   login-form
+    function check() {
+
+// stored data from the register-form
+        var storedName = localStorage.getItem('name');
+        var storedPw = localStorage.getItem('pw');
+
+// entered data from the login-form
+        var userName = document.getElementById('userName');
+        var userPw = document.getElementById('userPw');
+
+// check if stored data from register-form is equal to data from login form
+        if(userName.value == storedName || userPw.value == storedPw) {
+            alert('You are logged in.');
+        }else {
+            alert('ERROR');
+        }
+    }
+</script>
